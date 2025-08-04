@@ -1,59 +1,130 @@
-# Sakai19
+# Design System
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.5.
+This project is an Angular-based design system using Nx workspace for scalable enterprise development. It provides reusable UI components, patterns, and guidelines to ensure consistent user experiences across applications.
 
-## Development server
+## Project Structure
 
-To start a local development server, run:
-
-```bash
-ng serve
+```
+design-system/
+├── apps/                     # Application projects
+│   └── core-one/             # Main application
+├── libs/                     # Shared libraries (components, utilities, etc.)
+│   ├── ui/                   # UI component libraries
+│   ├── shared/               # Shared utilities and services
+│   └── feature-modules/      # Feature-specific libraries
+├── nx.json                   # Nx configuration
+└── package.json              # Project dependencies
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Development
 
-## Code scaffolding
+### Running Applications
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+To start the development server for a specific application:
 
 ```bash
-ng generate --help
+nx serve core-one
 ```
 
-## Building
+The application will be available at `http://localhost:4200/`.
 
-To build the project run:
+### Building Applications
+
+To build an application:
 
 ```bash
-ng build
+nx build core-one
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Built artifacts will be stored in the `dist/` directory.
 
-## Running unit tests
+### Creating Libraries
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+To generate a new library:
 
 ```bash
-ng test
+nx g @nx/angular:library my-lib --directory=libs/ui
 ```
 
-## Running end-to-end tests
+### Building Libraries
 
-For end-to-end (e2e) testing, run:
+To build a specific library:
 
 ```bash
-ng e2e
+nx build my-lib
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Component Development with Storybook
+
+### Running Storybook
+
+To start Storybook for a specific library:
+
+```bash
+nx run ui-components:storybook
+```
+
+Storybook will be available at `http://localhost:4400/`.
+
+### Building Storybook
+
+To build a static Storybook site:
+
+```bash
+nx run ui-components:build-storybook
+```
+
+## Testing
+
+### Running Unit Tests
+
+To execute unit tests for a specific project:
+
+```bash
+nx test core-one
+```
+
+or
+
+```bash
+nx test ui-components
+```
+
+### Running E2E Tests
+
+To run end-to-end tests:
+
+```bash
+nx e2e core-one-e2e
+```
+
+## Code Generation
+
+Nx provides powerful code generation capabilities:
+
+```bash
+nx g @nx/angular:component my-component --project=ui-components
+```
+
+## Dependency Graph
+
+To visualize project dependencies:
+
+```bash
+nx graph
+```
+
+## Guidelines
+
+- **Libraries**: Create focused, single-responsibility libraries
+- **Components**: Follow the Atomic Design methodology
+- **Testing**: Maintain high test coverage for all components
+- **Documentation**: Document components with Storybook stories
+- **Versioning**: Follow semantic versioning for libraries
 
 ## Additional Resources
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [Nx Documentation](https://nx.dev)
+- [Angular Documentation](https://angular.dev)
+- [Storybook Documentation](https://storybook.js.org)
+- [PrimeNG Documentation](https://primeng.org)
