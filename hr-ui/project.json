@@ -1,0 +1,63 @@
+{
+    "name": "hr-ui",
+    "$schema": "../node_modules/nx/schemas/project-schema.json",
+    "sourceRoot": "hr-ui/src",
+    "prefix": "hr",
+    "projectType": "library",
+    "tags": [],
+    "targets": {
+        "test": {
+            "executor": "@nx/jest:jest",
+            "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+            "options": {
+                "jestConfig": "hr-ui/jest.config.ts"
+            }
+        },
+        "lint": {
+            "executor": "@nx/eslint:lint"
+        },
+        "storybook": {
+            "executor": "@storybook/angular:start-storybook",
+            "options": {
+                "port": 4400,
+                "configDir": "hr-ui/.storybook",
+                "browserTarget": "hr-ui:build-storybook",
+                "compodoc": false
+            },
+            "configurations": {
+                "ci": {
+                    "quiet": true
+                }
+            }
+        },
+        "build-storybook": {
+            "executor": "@storybook/angular:build-storybook",
+            "outputs": ["{options.outputDir}"],
+            "options": {
+                "outputDir": "dist/storybook/hr-ui",
+                "configDir": "hr-ui/.storybook",
+                "browserTarget": "hr-ui:build-storybook",
+                "compodoc": false
+            },
+            "configurations": {
+                "ci": {
+                    "quiet": true
+                }
+            }
+        },
+        "static-storybook": {
+            "executor": "@nx/web:file-server",
+            "dependsOn": ["build-storybook"],
+            "options": {
+                "buildTarget": "hr-ui:build-storybook",
+                "staticFilePath": "dist/storybook/hr-ui",
+                "spa": true
+            },
+            "configurations": {
+                "ci": {
+                    "buildTarget": "hr-ui:build-storybook:ci"
+                }
+            }
+        }
+    }
+}

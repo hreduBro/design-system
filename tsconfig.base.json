@@ -9,7 +9,8 @@
         "skipLibCheck": true,
         "baseUrl": "./",
         "paths": {
-            "@/*": ["src/app/*"]
+            "@/*": ["src/app/*"],
+            "hr-ui": ["hr-ui/src/index.ts"]
         }
     }
 }
