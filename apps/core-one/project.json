@@ -1,0 +1,76 @@
+{
+    "name": "sakai-ng",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "apps/core-one/src",
+    "prefix": "app",
+    "generators": {
+        "@schematics/angular:component": {
+            "style": "scss"
+        }
+    },
+    "targets": {
+        "build": {
+            "executor": "@angular-devkit/build-angular:application",
+            "options": {
+                "outputPath": "dist/sakai-ng",
+                "index": "apps/core-one/src/index.html",
+                "browser": "apps/core-one/src/main.ts",
+                "polyfills": ["zone.js"],
+                "tsConfig": "apps/core-one/tsconfig.app.json",
+                "inlineStyleLanguage": "scss",
+                "assets": [
+                    {
+                        "glob": "**/*",
+                        "input": "public"
+                    }
+                ],
+                "styles": ["apps/core-one/src/assets/styles.scss"],
+                "scripts": []
+            },
+            "configurations": {
+                "production": {
+                    "outputHashing": "all"
+                },
+                "development": {
+                    "optimization": false,
+                    "extractLicenses": false,
+                    "sourceMap": true
+                }
+            },
+            "defaultConfiguration": "production",
+            "outputs": ["{options.outputPath}"]
+        },
+        "serve": {
+            "executor": "@angular-devkit/build-angular:dev-server",
+            "configurations": {
+                "production": {
+                    "buildTarget": "sakai-ng:build:production"
+                },
+                "development": {
+                    "buildTarget": "sakai-ng:build:development"
+                }
+            },
+            "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+            "executor": "@angular-devkit/build-angular:extract-i18n"
+        },
+        "test": {
+            "executor": "@angular-devkit/build-angular:karma",
+            "options": {
+                "polyfills": ["zone.js", "zone.js/testing"],
+                "tsConfig": "apps/core-one/tsconfig.spec.json",
+                "inlineStyleLanguage": "scss",
+                "assets": [
+                    {
+                        "glob": "**/*",
+                        "input": "public"
+                    }
+                ],
+                "styles": ["apps/core-one/src/assets/styles.scss"],
+                "scripts": []
+            }
+        }
+    }
+}
