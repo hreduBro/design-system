@@ -1,5 +1,5 @@
 {
-    "name": "sakai-ng",
+    "name": "core-one",
     "$schema": "../../node_modules/nx/schemas/project-schema.json",
     "projectType": "application",
     "sourceRoot": "apps/core-one/src",
@@ -13,7 +13,7 @@
         "build": {
             "executor": "@angular-devkit/build-angular:application",
             "options": {
-                "outputPath": "dist/sakai-ng",
+                "outputPath": "dist/core-one",
                 "index": "apps/core-one/src/index.html",
                 "browser": "apps/core-one/src/main.ts",
                 "polyfills": ["zone.js"],
@@ -45,10 +45,10 @@
             "executor": "@angular-devkit/build-angular:dev-server",
             "configurations": {
                 "production": {
-                    "buildTarget": "sakai-ng:build:production"
+                    "buildTarget": "core-one:build:production"
                 },
                 "development": {
-                    "buildTarget": "sakai-ng:build:development"
+                    "buildTarget": "core-one:build:development"
                 }
             },
             "defaultConfiguration": "development"

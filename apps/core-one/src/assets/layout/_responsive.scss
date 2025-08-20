@@ -16,7 +16,7 @@
             }
 
             .layout-sidebar {
-                transform: translateX(-100%);
+                transform: translateX(-80%);
                 left: 0;
                 top: 0;
                 height: 100vh;
@@ -46,13 +46,17 @@
 
             &.layout-static-inactive {
                 .layout-sidebar {
-                    transform: translateX(-100%);
+                    width: 6rem;
                     left: 0;
                 }
 
                 .layout-main-container {
-                    margin-left: 0;
+                    margin-left: 6rem;
                     padding-left: 2rem;
+                }
+
+                .layout-topbar{
+                    left: 6rem;
                 }
             }
         }
@@ -70,12 +74,17 @@
 
     .layout-wrapper {
         .layout-main-container {
-            margin-left: 0;
+            margin-left: 6rem;
             padding-left: 2rem;
         }
 
+        .layout-topbar{
+            left: 6rem;
+        }
+
+
         .layout-sidebar {
-            transform: translateX(-100%);
+            width: 6rem;
             left: 0;
             top: 0;
             height: 100vh;

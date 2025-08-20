@@ -1,33 +1,67 @@
-import { Component } from '@angular/core';
+import { Component, computed, effect, input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-menu',
     standalone: true,
     imports: [CommonModule, AppMenuitem, RouterModule],
-    template: `<ul class="layout-menu">
-        <ng-container *ngFor="let item of model; let i = index">
-            <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
-            <li *ngIf="item.separator" class="menu-separator"></li>
-        </ng-container>
-    </ul> `
+    template: `
+        <ul class="layout-menu pl-4! pr-5! hover:overflow-auto overflow-hidden h-[calc(100vh-9rem)]">
+            <ng-container *ngFor="let item of model(); let i = index">
+                <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
+                <li *ngIf="item.separator" class="menu-separator"></li>
+            </ng-container>
+        </ul>
+    `
 })
-export class AppMenu {
-    model: MenuItem[] = [];
+
+
+export class AppMenu implements OnInit {
+    private baseModel: MenuItem[] = [];
+    model = computed(() => this.getMenuModel());
+
+    sideBarActive = input<boolean | undefined>(true);
+
+    constructor() {
+        // React to sideBarActive changes
+        effect(() => {
+            console.log('Sidebar active changed:', this.sideBarActive());
+        });
+    }
 
     ngOnInit() {
-        this.model = [
+        this.baseModel = [
             {
-                label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+                items: [
+                    { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] },
+                    {
+                        label: 'Tutorial',
+                        icon: 'pi pi-fw pi-book',
+                        items: [
+                            {
+                                label: 'Submenu 1.1',
+                                icon: 'pi pi-fw pi-bookmark',
+                                items: [
+                                    { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
+                                    { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' }
+                                ],
+                            },
+                            {
+                                label: 'Form Layout',
+                                icon: 'pi pi-fw pi-id-card',
+                                routerLink: ['/uikit/formlayout'],
+                            }
+                        ],
+                    },
+                ]
             },
             {
-                label: 'UI Components',
                 items: [
-                    { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
                     { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
                     { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
                     { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
@@ -45,15 +79,9 @@ export class AppMenu {
                 ]
             },
             {
-                label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
                 routerLink: ['/pages'],
                 items: [
-                    {
-                        label: 'Landing',
-                        icon: 'pi pi-fw pi-globe',
-                        routerLink: ['/landing']
-                    },
                     {
                         label: 'Auth',
                         icon: 'pi pi-fw pi-user',
@@ -93,51 +121,6 @@ export class AppMenu {
                 ]
             },
             {
-                label: 'Hierarchy',
-                items: [
-                    {
-                        label: 'Submenu 1',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 1.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 1.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.2', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 1.1.3', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 1.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [{ label: 'Submenu 1.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    },
-                    {
-                        label: 'Submenu 2',
-                        icon: 'pi pi-fw pi-bookmark',
-                        items: [
-                            {
-                                label: 'Submenu 2.1',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [
-                                    { label: 'Submenu 2.1.1', icon: 'pi pi-fw pi-bookmark' },
-                                    { label: 'Submenu 2.1.2', icon: 'pi pi-fw pi-bookmark' }
-                                ]
-                            },
-                            {
-                                label: 'Submenu 2.2',
-                                icon: 'pi pi-fw pi-bookmark',
-                                items: [{ label: 'Submenu 2.2.1', icon: 'pi pi-fw pi-bookmark' }]
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                label: 'Get Started',
                 items: [
                     {
                         label: 'Documentation',
@@ -153,5 +136,24 @@ export class AppMenu {
                 ]
             }
         ];
+    }
+
+    private getMenuModel(): MenuItem[] {
+        const sidebarOpen = !this.sideBarActive();
+
+        if (sidebarOpen) {
+            return this.baseModel;
+        } else {
+            // Return model without labels when sidebar is collapsed
+            return this.removeLabelsFromModel(this.baseModel);
+        }
+    }
+
+    private removeLabelsFromModel(items: MenuItem[]): MenuItem[] {
+        return items.map(item => ({
+            ...item,
+            label: undefined, // Remove label when sidebar is collapsed
+            items: item.items ? this.removeLabelsFromModel(item.items) : undefined
+        }));
     }
 }

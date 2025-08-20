@@ -1,1 +1,1 @@
-export * from './lib/hr-ui/hr-ui';
+export * from './lib/button/button';

@@ -27,9 +27,9 @@ interface MenuChangeEvent {
 })
 export class LayoutService {
     _config: layoutConfig = {
-        preset: 'Aura',
-        primary: 'emerald',
-        surface: null,
+        preset: 'Lara',
+        primary: 'indigo',
+        surface: 'zinc',
         darkTheme: false,
         menuMode: 'static'
     };
@@ -64,7 +64,7 @@ export class LayoutService {
 
     theme = computed(() => (this.layoutConfig()?.darkTheme ? 'light' : 'dark'));
 
-    isSidebarActive = computed(() => this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive);
+    isSidebarActive = computed(() => this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive || this.layoutState().staticMenuDesktopInactive);
 
     isDarkTheme = computed(() => this.layoutConfig().darkTheme);
 
